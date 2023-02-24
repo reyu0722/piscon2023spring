@@ -402,10 +402,9 @@ func getMembersHandler(c echo.Context) error {
 	}
 
 	var total int
-	err = tx.GetContext(c.Request().Context(), &total, "SELECT COUNT(*) FROM `member`")
-	if err != nil {
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
+	MemberCountMutex.RLock()
+	total = MemberCount
+	MemberCountMutex.RUnlock()
 
 	_ = tx.Commit()
 
