@@ -111,9 +111,15 @@ duration_index = 10
 #regexp = '/[0-9]+(/|\s)'
 #replace = '/<num>$1'
 #
-#[[replace]]
-#regexp = '=[0-9]+(&|\s)'
-#replace = '=<num>$1'
+[[replace]]
+regexp = '=[0-9]+(&|\s)'
+replace = '=<num>$1'
+
+[[replace]]
+regexp = 'title=.*?[ &]'
+replace = 'title=<title>$1'
+
+
 #
 #[[replace]]
 #regexp = '\s+HTTP/[0-9.]+$'
