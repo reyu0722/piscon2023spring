@@ -116,9 +116,20 @@ regexp = '=[0-9]+(&|\s)'
 replace = '=<num>$1'
 
 [[replace]]
-regexp = 'title=.*?[ &]'
+regexp = 'title=.*?(&|\s)'
 replace = 'title=<title>$1'
 
+[[replace]]
+regexp = 'last_book_id=.*?(&|\s)'
+replace = 'last_book_id=<id>$1'
+
+[[replace]]
+regexp = 'author=.*?(&|\s)'
+replace = 'author=<author>$1'
+
+[[replace]]
+regexp = '/api/books/.*?(?|\s)'
+replace = '/api/books/<id>$1'
 
 #
 #[[replace]]
