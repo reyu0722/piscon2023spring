@@ -889,11 +889,15 @@ func postLendingsHandler(c echo.Context) error {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
-		err := tx.GetContext(c.Request().Context(), &res[i], "SELECT * FROM `lending` WHERE `id` = ?", id)
-		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		lending = Lending{
+			ID:        id,
+			BookID:    bookID,
+			MemberID:  req.MemberID,
+			Due:       due,
+			CreatedAt: lendingTime,
 		}
 
+		res[i].Lending = lending
 		res[i].MemberName = member.Name
 		res[i].BookTitle = book.Title
 	}
