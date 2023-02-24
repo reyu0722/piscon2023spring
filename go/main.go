@@ -718,16 +718,31 @@ func getBooksHandler(c echo.Context) error {
 		Books: make([]GetBookResponse, len(books)),
 		Total: total,
 	}
-	for i, book := range books {
-		res.Books[i].Book = book
 
-		err = tx.GetContext(c.Request().Context(), &Lending{}, "SELECT * FROM `lending` WHERE `book_id` = ?", book.ID)
-		if err == nil {
-			res.Books[i].Lending = true
-		} else if errors.Is(err, sql.ErrNoRows) {
-			res.Books[i].Lending = false
-		} else {
-			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	ids := make([]string, len(books))
+	for i, book := range books {
+		ids[i] = book.ID
+	}
+
+	query, params, err := sqlx.In("SELECT * FROM `lending` WHERE `book_id` IN (?)", ids)
+
+	var lendings []Lending
+	err = tx.SelectContext(c.Request().Context(), &lendings, query, params...)
+	if err != nil && err != sql.ErrNoRows {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	lendingMap := make(map[string]bool)
+	for _, lending := range lendings {
+		lendingMap[lending.BookID] = true
+	}
+
+	for i, book := range books {
+		_, lending := lendingMap[book.ID]
+
+		res.Books[i] = GetBookResponse{
+			Book:    book,
+			Lending: lending,
 		}
 	}
 
