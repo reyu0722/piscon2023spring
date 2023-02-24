@@ -1,0 +1,1 @@
+ALTER TABLE `lending` DROP PRIMARY KEY, ADD PRIMARY KEY (`book_id`);
