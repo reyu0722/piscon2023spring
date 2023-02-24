@@ -25,7 +25,7 @@ BUILD_DIR:=/home/isucon/webapp/go
 BIN_NAME:=isulibrary
 BIN_DIR:=/home/isucon/webapp
 
-SERVICE_NAME:=$(BIN_NAME).service
+SERVICE_NAME:=$(BIN_NAME)-go.service
 
 DB_PATH:=/etc/mysql
 NGINX_PATH:=/etc/nginx
