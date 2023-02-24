@@ -683,7 +683,7 @@ func getBooksHandler(c echo.Context) error {
 		_ = tx.Rollback()
 	}()
 
-	query := "SELECT COUNT(*) FROM `book` WHERE "
+	query := "SELECT * FROM `book` WHERE "
 	var args []any
 	if genre != "" {
 		query += "genre = ? AND "
@@ -699,17 +699,6 @@ func getBooksHandler(c echo.Context) error {
 	}
 	query = strings.TrimSuffix(query, "AND ")
 
-	var total int
-	err = tx.GetContext(c.Request().Context(), &total, query, args...)
-	if err != nil {
-		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-	}
-	if total == 0 {
-		return echo.NewHTTPError(http.StatusNotFound, "no books found")
-	}
-
-	query = strings.ReplaceAll(query, "COUNT(*)", "*")
 	query += "LIMIT ? OFFSET ?"
 	args = append(args, bookPageLimit, (page-1)*bookPageLimit)
 
@@ -721,6 +710,9 @@ func getBooksHandler(c echo.Context) error {
 	if len(books) == 0 {
 		return echo.NewHTTPError(http.StatusNotFound, "no books to show in this page")
 	}
+
+	var total int
+	err = tx.GetContext(c.Request().Context(), &total, "SELECT ROW_COUNT()")
 
 	res := GetBooksResponse{
 		Books: make([]GetBookResponse, len(books)),
