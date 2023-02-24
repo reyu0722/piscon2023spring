@@ -77,27 +77,29 @@ max_binlog_size   = 100M
 # binlog_do_db		= include_database_name
 # binlog_ignore_db	= include_database_name
 
-
-
-# レプリケーションやクラッシュ時のリカバリに利用する bin log を無効化
-skip-log-bin
-# doublewrite を無効化 クラッシュ時などのデータの整合性を犠牲にパフォーマンスを出すことができる
-skip-innodb-doublewrite
-
-# ディスクイメージをメモリ上にバッファさせる値をきめる設定値(メモリの75%くらい)
-innodb_buffer_pool_size = 2GB
-# buffer_poolをこの数に分割して確保（一つあたりが1G以上になるように）
-innodb_buffer_pool_instances = 2
-
+# connection の limit を更新 (default: 151)
+max_connections = 1024
+# ディスクイメージをメモリ上にバッファさせる値をきめる設定値 (別鯖なら搭載メモリの80%くらい)
+innodb_buffer_pool_size = 2000MB
 # InnoDBの更新ログを記録するディスク上のファイルサイズ(innodb_buffer_pool_sizeの4分の1程度)
 innodb_log_file_size = 500MB
-# InnoDBの更新ログを保持するメモリ（default: 8MB） 1Txでの大量のデータ更新がある場合
-innodb_log_buffer_size = 20MB
-# Dedicated write threads が、低並列な環境ではかえって性能低下をもたらす
-# 2コア以下の環境では、確実にOFFの方が高速
-innodb_log_write_threads = OFF
-
+# innoDBの更新ログを保持するメモリ(default: 8MB)、大量のデータの更新に効く
+innodb_log_buffer_size = 50MB
 # 1に設定するとトランザクション単位でログを出力するが 2 を指定すると1秒間に1回ログファイルに出力するようになる
 innodb_flush_log_at_trx_commit = 0
-# データファイル、ログファイルの読み書き方式を指定する(実験する価値はある)
+# データファイル、ログファイルの読み書き方式を指定する (OSによるディスクキャッシュとの2重キャッシュを防ぐ)
 innodb_flush_method = O_DIRECT
+# ORDER BYやGROUP BYのときに使われるメモリ量
+innodb_sort_buffer_size = 10MB
+# Dedicated log writer threads が、低並列な環境ではかえって性能低下をもたらす
+# 2コア以下の環境では、確実にOFFの方が高速
+innodb_log_writer_threads = OFF
+# 長いクエリが来ても大丈夫なように(バルクインサートなどに備える)
+max_allowed_packet = 512MB
+
+read_buffer_size = 10MB
+read_rnd_buffer_size = 10MB
+key_buffer_size = 256MB
+# InnoDBへの2回書き込みを無効にする
+skip-innodb-doublewrite
+disable-log-bin
