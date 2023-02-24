@@ -60,10 +60,12 @@ func main() {
 		log.Panic(err)
 	}
 
-	err = db.Get(&MemberCount, "SELECT COUNT(*) FROM `members`")
+	var count int
+	err = db.Get(&count, "SELECT COUNT(*) FROM `members`")
 	if err != nil {
 		log.Panic(err)
 	}
+	MemberCount = count
 
 	e := echo.New()
 	e.Debug = true
