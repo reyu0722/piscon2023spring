@@ -162,10 +162,10 @@ commit:
 before:
 	$(eval when := $(shell date "+%s"))
 	mkdir -p ~/logs/$(when)
-	@if [ -f $(NGINX_LOG) ]; then \
+	@if [ -e $(NGINX_LOG) ]; then \
 		sudo mv -f $(NGINX_LOG) ~/logs/$(when)/ ; \
 	fi
-	@if [ -f $(MYSQL_LOG) ]; then \
+	@if [ -e $(MYSQL_LOG) ]; then \
 		sudo mv -f $(MYSQL_LOG) ~/logs/$(when)/ ; \
 	fi
 	sudo systemctl daemon-reload
