@@ -147,6 +147,11 @@ replace = '<bool>'
 regexp = '(desc|asc)'
 replace = '<order>'
 
+[[replace]]
+regexp = '\?.*?(\s)'
+replace = '?<query>$1'
+
+
 #
 #[[replace]]
 #regexp = '\s+HTTP/[0-9.]+$'
