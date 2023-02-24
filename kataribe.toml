@@ -128,7 +128,7 @@ regexp = 'author=.*?(&|\s)'
 replace = 'author=<author>$1'
 
 [[replace]]
-regexp = '/api/books/.*?(?|\s)'
+regexp = '/api/books/.*?(\?|\s)'
 replace = '/api/books/<id>$1'
 
 #
