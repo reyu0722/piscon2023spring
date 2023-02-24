@@ -683,7 +683,7 @@ func getBooksHandler(c echo.Context) error {
 		_ = tx.Rollback()
 	}()
 
-	query := "SELECT * FROM `book` WHERE "
+	query := "SELECT SQL_CALC_FOUND_ROWS * FROM `book` WHERE "
 	var args []any
 	if genre != "" {
 		query += "genre = ? AND "
