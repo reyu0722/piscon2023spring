@@ -712,7 +712,7 @@ func getBooksHandler(c echo.Context) error {
 	}
 
 	var total int
-	err = tx.GetContext(c.Request().Context(), &total, "SELECT ROW_COUNT()")
+	err = tx.GetContext(c.Request().Context(), &total, "SELECT FOUND_ROWS()")
 
 	res := GetBooksResponse{
 		Books: make([]GetBookResponse, len(books)),
