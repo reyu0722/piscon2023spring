@@ -49,6 +49,9 @@ func main() {
 	}
 	defer db.Close()
 
+	db.SetMaxOpenConns(1024)
+	db.SetConnMaxLifetime(0)
+
 	var key string
 	err = db.Get(&key, "SELECT `key` FROM `key` WHERE `id` = (SELECT MAX(`id`) FROM `key`)")
 	if err != nil {
@@ -907,13 +910,13 @@ func postLendingsHandler(c echo.Context) error {
 
 		// 貸し出し中かどうか確認
 		/*
-		var lending Lending
-		err = tx.GetContext(c.Request().Context(), &lending, "SELECT * FROM `lending` WHERE `book_id` = ?", bookID)
-		if err == nil {
-			return echo.NewHTTPError(http.StatusConflict, "this book is already lent")
-		} else if !errors.Is(err, sql.ErrNoRows) {
-			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-		}
+			var lending Lending
+			err = tx.GetContext(c.Request().Context(), &lending, "SELECT * FROM `lending` WHERE `book_id` = ?", bookID)
+			if err == nil {
+				return echo.NewHTTPError(http.StatusConflict, "this book is already lent")
+			} else if !errors.Is(err, sql.ErrNoRows) {
+				return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+			}
 		*/
 
 		id := generateID()
