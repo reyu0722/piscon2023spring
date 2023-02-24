@@ -4,7 +4,7 @@ DB_HOST:=127.0.0.1
 DB_PORT:=3306
 DB_USER:=isucon
 DB_PASS:=isucon
-DB_NAME:=isuumo
+DB_NAME:=isulibrary
 
 GOPATH:=/home/isucon/go/bin
 
@@ -22,7 +22,7 @@ PPROF:=go tool pprof -png -output pprof.png http://localhost:6060/debug/pprof/pr
 
 PROJECT_ROOT:=/home/isucon/webapp
 BUILD_DIR:=/home/isucon/webapp/go
-BIN_NAME:=isuports
+BIN_NAME:=isulibrary
 BIN_DIR:=/home/isucon/webapp
 
 SERVICE_NAME:=$(BIN_NAME).service
