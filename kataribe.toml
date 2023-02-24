@@ -143,6 +143,10 @@ replace = '/api/members/<id>$1'
 regexp = '(true|false)'
 replace = '<bool>'
 
+[[replace]]
+regexp = '(desc|asc)'
+replace = '<order>'
+
 #
 #[[replace]]
 #regexp = '\s+HTTP/[0-9.]+$'
