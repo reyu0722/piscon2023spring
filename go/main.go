@@ -899,6 +899,7 @@ func postLendingsHandler(c echo.Context) error {
 		}
 
 		// 貸し出し中かどうか確認
+		/*
 		var lending Lending
 		err = tx.GetContext(c.Request().Context(), &lending, "SELECT * FROM `lending` WHERE `book_id` = ?", bookID)
 		if err == nil {
@@ -906,6 +907,7 @@ func postLendingsHandler(c echo.Context) error {
 		} else if !errors.Is(err, sql.ErrNoRows) {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
+		*/
 
 		id := generateID()
 
@@ -914,10 +916,10 @@ func postLendingsHandler(c echo.Context) error {
 			"INSERT INTO `lending` (`id`, `book_id`, `member_id`, `due`, `created_at`) VALUES (?, ?, ?, ?, ?)",
 			id, bookID, req.MemberID, due, lendingTime)
 		if err != nil {
-			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+			return echo.NewHTTPError(http.StatusConflict, "this book is already lent")
 		}
 
-		lending = Lending{
+		lending := Lending{
 			ID:        id,
 			BookID:    bookID,
 			MemberID:  req.MemberID,
