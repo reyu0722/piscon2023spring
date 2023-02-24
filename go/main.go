@@ -542,6 +542,11 @@ func banMemberHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
+	_, err = tx.ExecContext(c.Request().Context(), "DELETE FROM `lending` WHERE `member_id` = ?", id)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
 	_ = tx.Commit()
 
 	return c.NoContent(http.StatusNoContent)
@@ -907,13 +912,13 @@ func postLendingsHandler(c echo.Context) error {
 
 		// 貸し出し中かどうか確認
 		/*
-		var lending Lending
-		err = tx.GetContext(c.Request().Context(), &lending, "SELECT * FROM `lending` WHERE `book_id` = ?", bookID)
-		if err == nil {
-			return echo.NewHTTPError(http.StatusConflict, "this book is already lent")
-		} else if !errors.Is(err, sql.ErrNoRows) {
-			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-		}
+			var lending Lending
+			err = tx.GetContext(c.Request().Context(), &lending, "SELECT * FROM `lending` WHERE `book_id` = ?", bookID)
+			if err == nil {
+				return echo.NewHTTPError(http.StatusConflict, "this book is already lent")
+			} else if !errors.Is(err, sql.ErrNoRows) {
+				return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+			}
 		*/
 
 		id := generateID()
