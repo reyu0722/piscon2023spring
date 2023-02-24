@@ -25,7 +25,8 @@ CREATE TABLE `lending` (
   `book_id` varchar(255) NOT NULL,
   `due` datetime(6) NOT NULL,
   `created_at` datetime(6) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx_book_id` (`book_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 
 DROP TABLE IF EXISTS `member`;
