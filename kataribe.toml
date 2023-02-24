@@ -124,12 +124,24 @@ regexp = 'last_book_id=.*?(&|\s)'
 replace = 'last_book_id=<id>$1'
 
 [[replace]]
+regexp = 'last_member_id=.*?(&|\s)'
+replace = 'last_member_id=<id>$1'
+
+[[replace]]
 regexp = 'author=.*?(&|\s)'
 replace = 'author=<author>$1'
 
 [[replace]]
 regexp = '/api/books/.*?(\?|\s)'
 replace = '/api/books/<id>$1'
+
+[[replace]]
+regexp = '/api/members/.*?(\?|\s)'
+replace = '/api/members/<id>$1'
+
+[[replace]]
+regexp = '(true|false)'
+replace = '<bool>'
 
 #
 #[[replace]]
