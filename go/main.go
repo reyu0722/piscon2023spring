@@ -23,9 +23,14 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/oklog/ulid/v2"
+	_ "net/http/pprof"
 )
 
 func main() {
+  go func() {
+        log.Println(http.ListenAndServe("localhost:6060", nil))
+    }()
+	
 	host := getEnvOrDefault("DB_HOST", "localhost")
 	port := getEnvOrDefault("DB_PORT", "3306")
 	user := getEnvOrDefault("DB_USER", "isucon")
