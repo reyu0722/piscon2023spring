@@ -27,6 +27,9 @@ import (
 	"github.com/oklog/ulid/v2"
 )
 
+var MemberCount = 0
+var MemberCountMutex = sync.RWMutex{}
+
 func main() {
 	go func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
@@ -53,6 +56,11 @@ func main() {
 	}
 
 	block, err = aes.NewCipher([]byte(key))
+	if err != nil {
+		log.Panic(err)
+	}
+
+	err = db.Get(&MemberCount, "SELECT COUNT(*) FROM `members`")
 	if err != nil {
 		log.Panic(err)
 	}
@@ -270,6 +278,15 @@ func initializeHandler(c echo.Context) error {
 		log.Panic(err.Error())
 	}
 
+	var count int
+	err = db.GetContext(c.Request().Context(), &count, "SELECT COUNT(*) FROM `member`")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+	MemberCountMutex.Lock()
+	MemberCount = count
+	MemberCountMutex.Unlock()
+
 	return c.JSON(http.StatusOK, InitializeHandlerResponse{
 		Language: "Go",
 	})
@@ -319,6 +336,10 @@ func postMemberHandler(c echo.Context) error {
 	if err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
+
+	MemberCountMutex.Lock()
+	MemberCount++
+	MemberCountMutex.Unlock()
 
 	_ = tx.Commit()
 
