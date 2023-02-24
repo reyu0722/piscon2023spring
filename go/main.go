@@ -46,6 +46,8 @@ func main() {
 	}
 	defer db.Close()
 
+	db.SetMaxIdleConns(100)
+
 	var key string
 	err = db.Get(&key, "SELECT `key` FROM `key` WHERE `id` = (SELECT MAX(`id`) FROM `key`)")
 	if err != nil {
