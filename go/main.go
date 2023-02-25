@@ -697,7 +697,7 @@ func getBooksHandler(c echo.Context) error {
 	}
 	query = strings.TrimSuffix(query, "AND ")
 
-	query += "LIMIT ? OFFSET ?"
+	query += "LIMIT ? OFFSET ? ORDER BY `id` ASC"
 	args = append(args, bookPageLimit, (page-1)*bookPageLimit)
 
 	var books []Book
@@ -968,6 +968,8 @@ func getLendingsHandler(c echo.Context) error {
 		query += " WHERE `due` > ?"
 		args = append(args, time.Now())
 	}
+
+	query += " ORDER BY `id` ASC"
 
 	var lendings []Lending
 	err = tx.SelectContext(c.Request().Context(), &lendings, query, args...)
