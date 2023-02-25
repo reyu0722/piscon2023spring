@@ -887,7 +887,12 @@ func postLendingsHandler(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 	}
 
-	lendingTime := time.Now()
+	jst, err := time.LoadLocation("Asia/Tokyo")
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+	}
+
+	lendingTime := time.Now().In(jst)
 	due := lendingTime.Add(LendingPeriod * time.Millisecond)
 	res := make([]PostLendingsResponse, len(req.BookIDs))
 
