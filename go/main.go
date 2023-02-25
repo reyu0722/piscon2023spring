@@ -35,8 +35,6 @@ func main() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 
-	os.Setenv("TZ", "UTC")
-
 	host := getEnvOrDefault("DB_HOST", "localhost")
 	port := getEnvOrDefault("DB_PORT", "3306")
 	user := getEnvOrDefault("DB_USER", "isucon")
