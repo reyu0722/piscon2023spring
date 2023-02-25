@@ -894,6 +894,7 @@ func postLendingsHandler(c echo.Context) error {
 
 	lendingTime := time.Now().In(jst)
 	due := lendingTime.Add(LendingPeriod * time.Millisecond)
+	due = time.Date(due.Year(), due.Month(), due.Day(), due.Hour(), due.Minute(), due.Second(), due.Nanosecond() / 1000 * 1000, jst)
 	res := make([]PostLendingsResponse, len(req.BookIDs))
 
 	for i, bookID := range req.BookIDs {
